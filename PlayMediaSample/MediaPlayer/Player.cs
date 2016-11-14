@@ -15,6 +15,7 @@ namespace PlayerLib
 	{
 		public void PlayAvi(string path, bool saveScreen = false)
 		{
+			var i = 0;
 			try
 			{
 				var s = new VideoFileSource(path);
@@ -22,17 +23,20 @@ namespace PlayerLib
 				var uri = new Uri(path);
 				reader.Open(uri.AbsolutePath);
 				int framesToSkip = reader.FrameRate * 3600;
-				var i = 0;
 
-				while (true)
+				var seconds = reader.FrameCount / reader.FrameRate;
+				
+				for (i = 0; i < reader.FrameCount; i++)
 				{
-					var screen = reader.ReadVideoFrame();
-					Console.WriteLine(i);
-					if (i % 25 == 0)
+					try
 					{
-						screen.Save(@"screen_" + i.ToString() + ".jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
-					}
-					i++;
+						var screen = reader.ReadVideoFrame();
+						Console.WriteLine(i);
+						if (i % 25 == 0)
+						{
+							screen.Save(@"screen_" + i.ToString() + ".jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+						}
+					} catch { }
 				}
 			}
 			catch (Exception e)
@@ -46,16 +50,37 @@ namespace PlayerLib
 
 		public void MPPlayAvi(string path, bool saveScreen = false)
 		{
+			var mp = new MediaPlayer();
 			try
 			{
-				var mp = new MediaPlayer();
+				
 				mp.Open(new Uri(path));
-				var d = mp.NaturalDuration;
+				
+				mp.Play();
+
+				while (true)
+				{
+					Thread.Sleep(10000);
+				}
 			}
 			catch (Exception e)
 			{
 
 			}
+			finally
+			{
+				mp.Close();
+			}
+		}
+
+		public long GetDuration(string path)
+		{
+			var s = new VideoFileSource(path);
+			var reader = new VideoFileReader();
+			var uri = new Uri(path);
+			reader.Open(uri.AbsolutePath);
+			var seconds = reader.FrameCount / reader.FrameRate;
+			return seconds;
 		}
 	}
 }

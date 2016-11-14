@@ -12,8 +12,8 @@ namespace PlayMediaSample
 		static void Main(string[] args)
 		{
 			var p = new Player();
-			p.MPPlayAvi(@"F:\Distr\Interactions\2016101919312339601397088885502201.avi");
-			p.MPPlayAvi(@"F:\Distr\Interactions\2016101223101001285500100000001002.wav");
+			p.PlayAvi(@"F:\Distr\Interactions\2016101919312339601397088885502201.avi");
+			p.PlayAvi(@"F:\Distr\Interactions\2016102623103122885500100000001802.avi");
 		}
 	}
 }
