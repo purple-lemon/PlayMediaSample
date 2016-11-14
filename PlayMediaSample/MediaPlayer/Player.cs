@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -78,9 +79,34 @@ namespace PlayerLib
 			var s = new VideoFileSource(path);
 			var reader = new VideoFileReader();
 			var uri = new Uri(path);
-			reader.Open(uri.AbsolutePath);
-			var seconds = reader.FrameCount / reader.FrameRate;
-			return seconds;
+			var fi = new FileInfo(path);
+			if (fi.Exists)
+			{
+				reader.Open(path);
+				var seconds = reader.FrameCount / reader.FrameRate;
+				return seconds;
+			}
+			return -1;
 		}
+
+		public long GetDurationMP(string path)
+		{
+			MediaPlayer mp = new MediaPlayer();
+			try
+			{
+				var uri = new Uri(path);
+				mp.Open(uri);
+				var d = mp.NaturalDuration.TimeSpan.TotalSeconds;
+				return (long)d;
+			}
+			finally
+			{
+				if (mp != null)
+				{
+					mp.Close();
+				}
+			}
+		}
+
 	}
 }

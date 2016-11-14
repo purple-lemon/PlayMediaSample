@@ -12,8 +12,9 @@ namespace PlayMediaSample
 		static void Main(string[] args)
 		{
 			var p = new Player();
-			p.PlayAvi(@"F:\Distr\Interactions\2016101919312339601397088885502201.avi");
-			p.PlayAvi(@"F:\Distr\Interactions\2016102623103122885500100000001802.avi");
+			var z = p.GetDurationMP(@"C:\Bogdan\Workfolder\tasks\Test Downloaded\G711M u-Law.WAV");
+			var seconds = p.GetDuration(@"C:\Bogdan\Workfolder\tasks\Test Downloaded\G711M u-Law.WAV");
+			seconds = p.GetDuration(@"C:\Bogdan\Workfolder\tasks\Test Downloaded\decScn.scn");
 		}
 	}
 }
