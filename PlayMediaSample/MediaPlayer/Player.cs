@@ -89,6 +89,38 @@ namespace PlayerLib
 			return -1;
 		}
 
+		public void PlayWMP(string path)
+		{
+			MediaPlayer mp = new MediaPlayer();
+			try
+			{
+				var uri = new Uri(path);
+				mp.Open(uri);
+				mp.Play();
+				Thread.Sleep(3000);
+				mp.Pause();
+
+				var k = mp.NaturalDuration;
+				Console.WriteLine("Current position " + mp.Position.TotalSeconds);
+				if(mp.NaturalDuration.HasTimeSpan)
+					Console.WriteLine("Duration " + mp.NaturalDuration.TimeSpan.TotalSeconds);
+
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+			finally
+			{
+				if (mp != null)
+				{
+					mp.Stop();
+					mp.Close();
+					mp = null;
+				}
+			}
+		}
+
 		public long GetDurationMP(string path)
 		{
 			MediaPlayer mp = new MediaPlayer();
@@ -103,7 +135,9 @@ namespace PlayerLib
 			{
 				if (mp != null)
 				{
+					mp.Stop();
 					mp.Close();
+					mp = null;
 				}
 			}
 		}
