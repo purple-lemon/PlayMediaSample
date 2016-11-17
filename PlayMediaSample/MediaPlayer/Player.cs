@@ -1,4 +1,6 @@
 ﻿using Accord.Video.FFMPEG;
+using CSCore.Codecs.WAV;
+using CSCore.SoundIn;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -96,14 +98,45 @@ namespace PlayerLib
 			{
 				var uri = new Uri(path);
 				mp.Open(uri);
-				mp.Play();
+				// sleep recomended to make sure it was time to open file
 				Thread.Sleep(3000);
-				mp.Pause();
+				mp.Play();
+				using (var ms = new MemoryStream())
+				{
 
-				var k = mp.NaturalDuration;
-				Console.WriteLine("Current position " + mp.Position.TotalSeconds);
-				if(mp.NaturalDuration.HasTimeSpan)
-					Console.WriteLine("Duration " + mp.NaturalDuration.TimeSpan.TotalSeconds);
+					using (WasapiCapture capture = new WasapiLoopbackCapture())
+					{
+						capture.Initialize();
+						using (WaveWriter wave = new WaveWriter(ms, capture.WaveFormat))
+						{
+							capture.DataAvailable += (s, e) =>
+							{
+								wave.Write(e.Data, e.Offset, e.ByteCount);
+							};
+
+							capture.Start();
+							Thread.Sleep(10 * 1000);
+							capture.Stop();
+						}
+					}
+					mp.Stop();
+					ms.Flush();
+					var buffer = new ArraySegment<byte>();
+					if (ms.TryGetBuffer(out buffer))
+					{
+						if (buffer.Count > 44)
+						{
+
+						}
+						else
+						{
+
+						}
+					} else
+					{
+
+					}
+				}
 
 			}
 			catch(Exception e)
