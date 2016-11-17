@@ -1,6 +1,4 @@
 ﻿using Accord.Video.FFMPEG;
-using CSCore.Codecs.WAV;
-using CSCore.SoundIn;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -104,21 +102,21 @@ namespace PlayerLib
 				using (var ms = new MemoryStream())
 				{
 
-					using (WasapiCapture capture = new WasapiLoopbackCapture())
-					{
-						capture.Initialize();
-						using (WaveWriter wave = new WaveWriter(ms, capture.WaveFormat))
-						{
-							capture.DataAvailable += (s, e) =>
-							{
-								wave.Write(e.Data, e.Offset, e.ByteCount);
-							};
+					//using (WasapiCapture capture = new WasapiLoopbackCapture())
+					//{
+					//	capture.Initialize();
+					//	using (WaveWriter wave = new WaveWriter(ms, capture.WaveFormat))
+					//	{
+					//		capture.DataAvailable += (s, e) =>
+					//		{
+					//			wave.Write(e.Data, e.Offset, e.ByteCount);
+					//		};
 
-							capture.Start();
-							Thread.Sleep(10 * 1000);
-							capture.Stop();
-						}
-					}
+					//		capture.Start();
+					//		Thread.Sleep(10 * 1000);
+					//		capture.Stop();
+					//	}
+					//}
 					mp.Stop();
 					ms.Flush();
 					var buffer = new ArraySegment<byte>();

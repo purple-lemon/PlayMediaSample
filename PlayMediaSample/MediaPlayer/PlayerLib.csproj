@@ -52,9 +52,6 @@
       <HintPath>..\packages\AForge.Video.2.2.5\lib\AForge.Video.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CSCore">
-      <HintPath>..\..\..\RAF_Actions\Utils\Libs\CSCore.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
