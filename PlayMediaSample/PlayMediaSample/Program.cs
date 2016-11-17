@@ -17,7 +17,11 @@ namespace PlayMediaSample
 
 			foreach (var k in ConfigurationManager.AppSettings.AllKeys)
 			{
-				p.GetDurationMP(ConfigurationManager.AppSettings[k]);
+				var value = ConfigurationManager.AppSettings[k];
+				p.SaveFrameAtSecond(value, 0);
+				p.SaveFrameAtSecond(value, 1);
+				p.SaveFrameAtSecond(value, 2);
+				p.SaveFrameAtSecond(value, 3);
 				Console.ReadLine();
 			}
 		}

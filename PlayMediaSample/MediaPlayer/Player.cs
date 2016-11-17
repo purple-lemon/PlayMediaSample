@@ -161,8 +161,7 @@ namespace PlayerLib
 				var uri = new Uri(path);
 				
 				mp.Open(uri);
-				mp.Play();
-				SavePlayerFrame(mp);
+				return (long)Math.Round(mp.NaturalDuration.TimeSpan.TotalSeconds);
 			}
 			finally
 			{
@@ -173,11 +172,34 @@ namespace PlayerLib
 					mp = null;
 				}
 			}
-
-			return (long)0;
 		}
 
-		public void SavePlayerFrame(MediaPlayer mediaPlayer)
+		public void SaveFrameAtSecond(string path, int second)
+		{
+			MediaPlayer mp = new MediaPlayer();
+			try
+			{
+				var uri = new Uri(path);
+				mp.Open(uri);
+				mp.Position = new TimeSpan(0,0,second);
+				mp.Play();
+				Thread.Sleep(1000);
+				mp.Pause();
+				Thread.Sleep(1000);
+				SavePlayerFrame(mp, "scr_" + second);
+			}
+			finally
+			{
+				if (mp != null)
+				{
+					mp.Stop();
+					mp.Close();
+					mp = null;
+				}
+			}
+		}
+
+		public void SavePlayerFrame(MediaPlayer mediaPlayer, string filePath)
 
 		{
 
@@ -211,9 +233,9 @@ namespace PlayerLib
 
 			JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 			Guid photoID = System.Guid.NewGuid();
-			String photolocation = photoID.ToString() + ".jpg";  //file name 
+			String photolocation = filePath + ".jpg";  //file name 
 
-			encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+			encoder.Frames.Add(BitmapFrame.Create(bmp));
 
 			using (var filestream = new FileStream(photolocation, FileMode.Create))
 				encoder.Save(filestream);
