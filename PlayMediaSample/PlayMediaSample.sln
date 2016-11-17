@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayMediaSample", "PlayMedi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerLib", "MediaPlayer\PlayerLib.csproj", "{6025C69B-CE6A-451D-A9DD-6BB4F461E109}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWMPReference", "TestWMPReference\TestWMPReference.csproj", "{ED6C0EAB-05A8-4B3F-84BC-C3585C66485F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6025C69B-CE6A-451D-A9DD-6BB4F461E109}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6025C69B-CE6A-451D-A9DD-6BB4F461E109}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6025C69B-CE6A-451D-A9DD-6BB4F461E109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED6C0EAB-05A8-4B3F-84BC-C3585C66485F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED6C0EAB-05A8-4B3F-84BC-C3585C66485F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED6C0EAB-05A8-4B3F-84BC-C3585C66485F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED6C0EAB-05A8-4B3F-84BC-C3585C66485F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
