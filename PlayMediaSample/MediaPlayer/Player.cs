@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PlayerLib
 {
@@ -158,9 +159,10 @@ namespace PlayerLib
 			try
 			{
 				var uri = new Uri(path);
+				
 				mp.Open(uri);
-				var d = mp.NaturalDuration.TimeSpan.TotalSeconds;
-				return (long)d;
+				mp.Play();
+				SavePlayerFrame(mp);
 			}
 			finally
 			{
@@ -171,6 +173,52 @@ namespace PlayerLib
 					mp = null;
 				}
 			}
+
+			return (long)0;
+		}
+
+		public void SavePlayerFrame(MediaPlayer mediaPlayer)
+
+		{
+
+			DrawingVisual drawingVisual = new DrawingVisual();
+
+			DrawingContext drawingContext = drawingVisual.RenderOpen();
+
+			drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, mediaPlayer.NaturalVideoWidth, mediaPlayer.NaturalVideoHeight));
+
+			drawingContext.Close();
+
+			RenderTargetBitmap bmp = new RenderTargetBitmap(mediaPlayer.NaturalVideoWidth, mediaPlayer.NaturalVideoHeight, 120, 96, PixelFormats.Pbgra32);
+
+			bmp.Render(drawingVisual);
+			System.Windows.Media.Imaging.BitmapImage img = new BitmapImage();
+
+			var bitmapImage = new BitmapImage();
+			var bitmapEncoder = new PngBitmapEncoder();
+			bitmapEncoder.Frames.Add(BitmapFrame.Create(bmp));
+
+			using (var stream = new MemoryStream())
+			{
+				bitmapEncoder.Save(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+
+				bitmapImage.BeginInit();
+				bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+				bitmapImage.StreamSource = stream;
+				bitmapImage.EndInit();
+			}
+
+			JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+			Guid photoID = System.Guid.NewGuid();
+			String photolocation = photoID.ToString() + ".jpg";  //file name 
+
+			encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+
+			using (var filestream = new FileStream(photolocation, FileMode.Create))
+				encoder.Save(filestream);
+			// Add Image to the UI
+
 		}
 
 	}

@@ -17,7 +17,7 @@ namespace PlayMediaSample
 
 			foreach (var k in ConfigurationManager.AppSettings.AllKeys)
 			{
-				p.PlayWMP(ConfigurationManager.AppSettings[k]);
+				p.GetDurationMP(ConfigurationManager.AppSettings[k]);
 				Console.ReadLine();
 			}
 		}
