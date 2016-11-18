@@ -1,4 +1,5 @@
 ﻿using Accord.Video.FFMPEG;
+using Microsoft.Test.VisualVerification;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -211,7 +212,7 @@ namespace PlayerLib
 
 			drawingContext.Close();
 
-			RenderTargetBitmap bmp = new RenderTargetBitmap(mediaPlayer.NaturalVideoWidth, mediaPlayer.NaturalVideoHeight, 120, 96, PixelFormats.Pbgra32);
+			RenderTargetBitmap bmp = new RenderTargetBitmap(mediaPlayer.NaturalVideoWidth, mediaPlayer.NaturalVideoHeight, 96, 96, PixelFormats.Pbgra32);
 
 			bmp.Render(drawingVisual);
 			System.Windows.Media.Imaging.BitmapImage img = new BitmapImage();
@@ -241,6 +242,60 @@ namespace PlayerLib
 				encoder.Save(filestream);
 			// Add Image to the UI
 
+		}
+
+		public Snapshot GetFrameAtSecond(string path, int second)
+		{
+			MediaPlayer mp = new MediaPlayer();
+			try
+			{
+				var uri = new Uri(path);
+				mp.Open(uri);
+				mp.Position = new TimeSpan(0, 0, second);
+				mp.Play();
+				Thread.Sleep(1000);
+				mp.Pause();
+				Thread.Sleep(1000);
+				return GetSnapshot(mp);
+			}
+			finally
+			{
+				if (mp != null)
+				{
+					mp.Stop();
+					mp.Close();
+					mp = null;
+				}
+			}
+		}
+
+		public Snapshot GetSnapshot(MediaPlayer mp)
+		{
+			DrawingVisual drawingVisual = new DrawingVisual();
+
+			DrawingContext drawingContext = drawingVisual.RenderOpen();
+
+			drawingContext.DrawVideo(mp, new Rect(0, 0, mp.NaturalVideoWidth, mp.NaturalVideoHeight));
+
+			drawingContext.Close();
+
+			System.Windows.Media.Imaging.RenderTargetBitmap bmp = new System.Windows.Media.Imaging.RenderTargetBitmap(mp.NaturalVideoWidth, mp.NaturalVideoHeight, 96, 96, PixelFormats.Pbgra32);
+
+			bmp.Render(drawingVisual);
+
+			JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+			Guid photoID = System.Guid.NewGuid();
+			String photolocation = photoID + ".jpg";  //file name 
+
+			encoder.Frames.Add(BitmapFrame.Create(bmp));
+
+			using (var ms = new MemoryStream())
+			{
+				encoder.Save(ms);
+				var img = (Bitmap)Image.FromStream(ms);
+				var snapshot = Snapshot.FromBitmap(img);
+				return snapshot;
+			}
 		}
 
 	}
