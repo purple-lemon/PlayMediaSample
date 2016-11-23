@@ -12,19 +12,11 @@ namespace PlayMediaSample
 	{
 		static void Main(string[] args)
 		{
+			var pathToFile = ConfigurationManager.AppSettings[0];
 			var p = new Player();
-			//var z = p.GetDurationMP(@"C:\Bogdan\Workfolder\tasks\Test Downloaded\G711M u-Law.WAV");
-
-			foreach (var k in ConfigurationManager.AppSettings.AllKeys)
-			{
-				var value = ConfigurationManager.AppSettings[k];
-				var snapshot = p.GetFrameAtSecond(value, 0);
-				snapshot.ToFile(DateTime.UtcNow.Ticks + ".jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
-				//p.SaveFrameAtSecond(value, 1);
-				//p.SaveFrameAtSecond(value, 2);
-				//p.SaveFrameAtSecond(value, 3);
-				Console.ReadLine();
-			}
+			Console.WriteLine("duration: " + p.GetDurationMP(pathToFile));
+			p.SaveFrameAtSecond(pathToFile, 0);
+			var snapshot = p.GetFrameAtSecond(pathToFile, 0);
 		}
 	}
 }

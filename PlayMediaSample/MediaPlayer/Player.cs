@@ -103,22 +103,6 @@ namespace PlayerLib
 				mp.Play();
 				using (var ms = new MemoryStream())
 				{
-
-					//using (WasapiCapture capture = new WasapiLoopbackCapture())
-					//{
-					//	capture.Initialize();
-					//	using (WaveWriter wave = new WaveWriter(ms, capture.WaveFormat))
-					//	{
-					//		capture.DataAvailable += (s, e) =>
-					//		{
-					//			wave.Write(e.Data, e.Offset, e.ByteCount);
-					//		};
-
-					//		capture.Start();
-					//		Thread.Sleep(10 * 1000);
-					//		capture.Stop();
-					//	}
-					//}
 					mp.Stop();
 					ms.Flush();
 					var buffer = new ArraySegment<byte>();
@@ -203,7 +187,6 @@ namespace PlayerLib
 		public void SavePlayerFrame(MediaPlayer mediaPlayer, string filePath)
 
 		{
-
 			DrawingVisual drawingVisual = new DrawingVisual();
 
 			DrawingContext drawingContext = drawingVisual.RenderOpen();
